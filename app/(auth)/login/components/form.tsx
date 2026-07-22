@@ -9,7 +9,7 @@ export default function LoginForm() {
   return (
     <form className="login">
       <h1 className="login-title">Biblioteca Virtual</h1>
-      <p className="login-description">
+      <p className="login-subtitle">
         Acesse sua conta para continuar
       </p>
 
