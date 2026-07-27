@@ -1,8 +1,8 @@
 "use client"
 
-import Input from "@/app/ui/input";
-import Button from "@/app/ui/button";
-import "@/app/(auth)/login/components/form.css"
+import Input from "@/components/ui/Input/input";
+import Button from "@/components/ui/Button/button";
+import "@/features/auth/components/LoginForm.css";
 
 export default function LoginForm() {
 
