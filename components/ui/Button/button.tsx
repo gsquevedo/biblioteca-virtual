@@ -1,21 +1,20 @@
-import { MouseEvent, ReactNode } from "react";
+import { ButtonHTMLAttributes, ReactNode } from "react";
 
-type ButtonProps = {
-  className?: string;
-  type?: "button" | "submit" | "reset";
+type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
   children: ReactNode;
-  value?: string;
-  disabled?: boolean;
-  onClick?: (event: MouseEvent<HTMLButtonElement>) => void;
-}
+};
 
-export default function Button({ className, children, ...props } : ButtonProps){
+export default function Button({
+  children,
+  className,
+  ...props
+}: ButtonProps) {
   return (
-    <button 
-      className={className} 
+    <button
+      className={className}
       {...props}
     >
       {children}
     </button>
-  )
+  );
 }

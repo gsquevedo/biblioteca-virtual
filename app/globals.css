@@ -11,3 +11,34 @@ body {
   font-family: Arial, Helvetica, sans-serif;
   background-color: #f5f5f5;
 }
+
+.banner-content {
+  width: 100%;
+  max-width: 650px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 2rem;
+}
+
+.banner-image {
+  display: block;
+  width: 100%;
+  max-width: 420px;
+  height: auto;
+}
+
+.banner-content h2 {
+  font-size: clamp(1.4rem, 2.4vw, 1.7rem);
+  font-weight: 700;
+  color: #1f2937;
+  line-height: 1.4;
+}
+
+.banner-content p {
+  color: #6b7280;
+  line-height: 1.6;
+  font-size: 0.95rem;
+  max-width: 360px;
+}
