@@ -11,7 +11,7 @@
   width: 100%;
   max-width: 460px;
   background: #ffffff;
-  padding: 3rem;
+  padding: 2rem 3rem;
   border-radius: 24px;
   border: 1px solid #e5e7eb;
   box-shadow:
@@ -46,7 +46,7 @@
 }
 
 .login-link {
-  margin-top: 1rem;
+  margin-top: 0.3rem;
   text-align: center;
   font-size: 0.95rem;
   color: #6b7280;

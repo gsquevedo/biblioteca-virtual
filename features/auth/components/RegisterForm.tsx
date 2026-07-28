@@ -5,34 +5,45 @@ import Button from "@/components/ui/Button/button";
 import "@/features/auth/components/RegisterForm.css";
 import Link from "next/link";
 
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+
+import {
+  registerSchema, 
+  type RegisterFormData
+} from "@/features/auth/validation/register.schema";
+
+
 export default function RegisterForm() {
+  const {
+    register, handleSubmit, formState: { errors },
+  } = useForm<RegisterFormData>({
+    resolver: zodResolver(registerSchema),
+  });
+
+  function onSubmit(data: RegisterFormData) {
+    console.log(data);
+  }
+
   return (
-    <form className="register">
+    <form className="register" onSubmit={handleSubmit(onSubmit)}>
       <h1 className="register-title">Biblioteca Virtual</h1>
       <p className="register-subtitle">Registre-se para acessar a biblioteca</p>
-
-      <div className="form-group">
-        <label htmlFor="name">Nome</label>
-        <Input
-          id="name"
-          name="name"
-          type="text"
-          className="input"
-          placeholder="Digite seu nome"
-          required
-        />
-      </div>
 
       <div className="form-group">
         <label htmlFor="username">Usuário</label>
         <Input
           id="username"
           type="text"
-          name="username"
           className="input"
           placeholder="Digite seu usuário"
-          required
+          {...register("username")}
         />
+        {errors.username && (
+          <span className="error-message">
+            {errors.username.message}
+          </span>
+        )}
       </div>
 
       <div className="form-group">
@@ -40,11 +51,15 @@ export default function RegisterForm() {
         <Input
           id="email"
           type="email"
-          name="email"
           className="input"
           placeholder="Digite seu e-mail"
-          required
+          {...register("email")}
         />
+        {errors.email && (
+          <span className="error-message">
+            {errors.email.message}
+          </span>
+        )}
       </div>
 
       <div className="form-group">
@@ -52,11 +67,15 @@ export default function RegisterForm() {
         <Input 
           id="password"
           type="password"
-          name="password"
           className="input"
           placeholder="Digite sua senha"
-          required 
+          {...register("password")}
         />
+        {errors.password && (
+          <span className="error-message">
+            {errors.password.message}
+          </span>
+        )}
       </div>
 
       <div className="form-group">
@@ -64,22 +83,15 @@ export default function RegisterForm() {
         <Input 
           id="confirmPassword"
           type="password"
-          name="confirmPassword"
           className="input"
           placeholder="Confirme sua senha"
-          required
+          {...register("confirmPassword")}
         />
-      </div>
-
-      <div className="form-group">
-        <label htmlFor="birthDate">Data de Nascimento</label>
-        <Input
-          id="birthDate"
-          type="date"
-          name="birthDate"
-          className="input"
-          required
-        />
+        {errors.confirmPassword && (
+          <span className="error-message">
+            {errors.confirmPassword.message}
+          </span>
+        )}
       </div>
 
       <Button
