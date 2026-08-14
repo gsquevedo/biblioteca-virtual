@@ -2,7 +2,7 @@
 
 import Input from "@/components/ui/Input/input";
 import Button from "@/components/ui/Button/button";
-import "@/features/auth/components/RegisterForm.css";
+import "@/features/auth/components/AuthForm.css";
 import Link from "next/link";
 
 import { useForm } from "react-hook-form";
@@ -26,9 +26,9 @@ export default function RegisterForm() {
   }
 
   return (
-    <form className="register" onSubmit={handleSubmit(onSubmit)}>
-      <h1 className="register-title">Biblioteca Virtual</h1>
-      <p className="register-subtitle">Registre-se para acessar a biblioteca</p>
+    <form className="auth-form" onSubmit={handleSubmit(onSubmit)}>
+      <h1 className="auth-form-title">Biblioteca Virtual</h1>
+      <p className="auth-form-subtitle">Registre-se para acessar a biblioteca</p>
 
       <div className="form-group">
         <label htmlFor="username">Usuário</label>
@@ -100,7 +100,7 @@ export default function RegisterForm() {
           Registrar
       </Button>
 
-      <p className="login-link">
+      <p className="auth-form-link">
         Já possui uma conta? <Link href="/login">Faça login</Link>
       </p>
     

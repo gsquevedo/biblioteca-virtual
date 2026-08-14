@@ -2,7 +2,7 @@
 
 import Input from "@/components/ui/Input/input";
 import Button from "@/components/ui/Button/button";
-import "@/features/auth/components/LoginForm.css";
+import "@/features/auth/components/AuthForm.css";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
@@ -10,6 +10,7 @@ import {
   loginSchema, 
   type LoginFormData
 } from "@/features/auth/validation/login.schema";
+import Link from "next/link";
 
 export default function LoginForm() {
   const {
@@ -23,9 +24,9 @@ export default function LoginForm() {
   }
 
   return (
-    <form className="login" onSubmit={handleSubmit(onSubmit)}>
-      <h1 className="login-title">Biblioteca Virtual</h1>
-      <p className="login-subtitle">
+    <form className="auth-form" onSubmit={handleSubmit(onSubmit)}>
+      <h1 className="auth-form-title">Biblioteca Virtual</h1>
+      <p className="auth-form-subtitle">
         Acesse sua conta para continuar
       </p>
 
@@ -65,12 +66,9 @@ export default function LoginForm() {
         )}
       </div>
       
-      <a
-        href="#"
-        className="forgot-password"
-      >
-        Esqueceu sua senha?
-      </a>
+      <p className="auth-form-link">
+        <Link href="/forgot-password">Esqueceu sua senha?</Link>
+      </p>
       <Button
         className="button-primary"
         type="submit">

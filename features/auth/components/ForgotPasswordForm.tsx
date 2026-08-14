@@ -4,15 +4,18 @@ import Link from "next/link";
 import Input from "@/components/ui/Input/input";
 import Button from "@/components/ui/Button/button";
 
-import "@/features/auth/components/ForgotPasswordForm.css";
+import "@/features/auth/components/AuthForm.css";
+import { useForgotPassword } from "@/features/auth/hooks/useForgotPassword";
 
 export default function ForgotPasswordForm() {
-  return (
-    <form className="forgot-password">
-      <h1 className="forgot-password-title">Esqueceu a senha?</h1>
+  const { register, handleSubmit, onSubmit, formState: { errors, isSubmitting }, message, success } = useForgotPassword();
 
-      <p className="forgot-password-subtitle">
-        Não se preocupe! Insira seu e-mail abaixo e enviaremos um código de verificação para redefinir sua senha.]
+  return (
+    <form className="auth-form" onSubmit={handleSubmit(onSubmit)} noValidate>
+      <h1 className="auth-form-title">Esqueceu a senha?</h1>
+
+      <p className="auth-form-subtitle">
+        Não se preocupe! Insira seu e-mail abaixo e enviaremos um código de verificação para redefinir sua senha.
       </p>
 
       <div className="form-group">
@@ -20,20 +23,33 @@ export default function ForgotPasswordForm() {
         <Input
           type="email"
           id="email"
-          name="email"
-          className="input"
+          className={`input ${errors.email ? "error" : ""}`}
           placeholder="Digite seu e-mail"
-          required
+          {...register("email")}
         />
+
+        {errors.email && (
+          <span className="error-message">
+            {errors.email.message}
+          </span>
+        )}
       </div>
 
-      <Button 
-        type="submit" 
-        className="button-primary">
-        Enviar código
+      { message && (
+        <div className={`message ${success ? "success" : "error"}`}>
+          {message}
+        </div>
+      )}
+
+      <Button
+        type="submit"
+        className="button-primary"
+        disabled={isSubmitting}
+      >
+        {isSubmitting ? "Enviando..." : "Enviar código"}
       </Button>
 
-      <p className="forgot-password-link">
+      <p className="auth-link">
         Lembrou sua senha? <Link href="/login">Faça login</Link>
       </p>
     </form>
