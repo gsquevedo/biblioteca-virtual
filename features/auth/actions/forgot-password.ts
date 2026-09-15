@@ -1,42 +1,52 @@
 "use server";
 
-import { forgotPasswordSchema } from "@/features/auth/validation/forgot-password.schema";
+import { resend } from "@/lib/resend";
+import { generateVerificationCode } from "@/features/auth/utils/generateVerificationCode";
 
-type ForgotPasswordState = {
-  success: boolean;
-  message: string;
-};
-
-export async function forgotPassword(
-  email: string
-): Promise<ForgotPasswordState> {
+export async function forgotPassword(email: string) {
   try {
-    // Validação no servidor
-    
-    const result = forgotPasswordSchema.safeParse({
-      email,
+    const verificationCode = generateVerificationCode();
+
+    console.log("Código gerado:", verificationCode);
+
+    const { data, error } = await resend.emails.send({
+      from: "Biblioteca Virtual <onboarding@resend.dev>",
+      to: [email],
+      subject: "Código para redefinir sua senha",
+      html: `
+        <h1>Redefinição de senha</h1>
+
+        <p>Você solicitou a redefinição da sua senha.</p>
+
+        <p>Seu código de verificação é:</p>
+
+        <h2>${verificationCode}</h2>
+
+        <p>Esse código é válido por 10 minutos.</p>
+      `,
     });
 
-    if (!result.success) {
+    if (error) {
+      console.error("Erro ao enviar e-mail:", error);
+
       return {
         success: false,
-        message: result.error.issues[0].message,
+        message: "Não foi possível enviar o e-mail.",
       };
     }
 
-    // Simula um processamento
-    await new Promise((resolve) => setTimeout(resolve, 1500));
-
-    console.log("Simulando envio de e-mail para:", email);
+    console.log("E-mail enviado:", data);
 
     return {
       success: true,
-      message: "Código enviado com sucesso.",
+      message: "Código enviado para seu e-mail.",
     };
-  } catch {
+  } catch (error) {
+    console.error("Erro inesperado:", error);
+
     return {
       success: false,
-      message: "Não foi possível enviar o código.",
+      message: "Ocorreu um erro ao enviar o e-mail.",
     };
   }
 }
