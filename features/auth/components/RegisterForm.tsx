@@ -7,22 +7,40 @@ import Link from "next/link";
 
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 import {
   registerSchema, 
   type RegisterFormData
 } from "@/features/auth/validation/register.schema";
 
+import { register as registerUser } from "@/features/auth/actions/register";
+
 
 export default function RegisterForm() {
   const {
-    register, handleSubmit, formState: { errors },
+    register, handleSubmit, formState: { errors, isSubmitting },
   } = useForm<RegisterFormData>({
     resolver: zodResolver(registerSchema),
   });
 
-  function onSubmit(data: RegisterFormData) {
-    console.log(data);
+  const [message, setMessage] = useState("");
+  const router = useRouter();
+
+  async function onSubmit(data: RegisterFormData) {
+    const result = await registerUser({
+      name: data.username,
+      email: data.email,
+      password: data.password,
+    });
+
+    if (!result.success) {
+      setMessage(result.message);
+      return;
+    }
+
+    router.push("/login");
   }
 
   return (
@@ -35,7 +53,7 @@ export default function RegisterForm() {
         <Input
           id="username"
           type="text"
-          className="input"
+          className={`input ${errors.username ? "error" : ""}`}
           placeholder="Digite seu usuário"
           {...register("username")}
         />
@@ -51,7 +69,7 @@ export default function RegisterForm() {
         <Input
           id="email"
           type="email"
-          className="input"
+          className={`input ${errors.email ? "error" : ""}`}
           placeholder="Digite seu e-mail"
           {...register("email")}
         />
@@ -67,7 +85,7 @@ export default function RegisterForm() {
         <Input 
           id="password"
           type="password"
-          className="input"
+          className={`input ${errors.password ? "error" : ""}`}
           placeholder="Digite sua senha"
           {...register("password")}
         />
@@ -83,7 +101,7 @@ export default function RegisterForm() {
         <Input 
           id="confirmPassword"
           type="password"
-          className="input"
+          className={`input ${errors.confirmPassword ? "error" : ""}`}
           placeholder="Confirme sua senha"
           {...register("confirmPassword")}
         />
@@ -96,14 +114,16 @@ export default function RegisterForm() {
 
       <Button
         className="button-primary"
-        type="submit">
-          Registrar
+        type="submit"
+        disabled={isSubmitting}
+      >
+        {isSubmitting ? "Registrando..." : "Registrar"}
       </Button>
 
       <p className="auth-form-link">
         Já possui uma conta? <Link href="/login">Faça login</Link>
       </p>
-    
+      {message && <p className="auth-form-message">{message}</p>}
     </form>
   );
 }

@@ -5,22 +5,31 @@ import Button from "@/components/ui/Button/button";
 import "@/features/auth/components/AuthForm.css";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useState } from "react";
 
 import {
   loginSchema, 
   type LoginFormData
 } from "@/features/auth/validation/login.schema";
 import Link from "next/link";
+import { login as loginUser } from "@/features/auth/actions/login";
 
 export default function LoginForm() {
   const {
-    register, handleSubmit, formState: { errors },
+    register, handleSubmit, formState: { errors, isSubmitting },
   } = useForm<LoginFormData>({
     resolver: zodResolver(loginSchema),
   });
 
-  function onSubmit(data: LoginFormData) {
-    console.log(data);
+  const [message, setMessage] = useState("");
+
+  async function onSubmit(data: LoginFormData) {
+    const result = await loginUser({
+      email: data.email,
+      password: data.password,
+    });
+
+    setMessage(result.message);
   }
 
   return (
@@ -71,9 +80,17 @@ export default function LoginForm() {
       </p>
       <Button
         className="button-primary"
-        type="submit">
-          Entrar
+        type="submit"
+        disabled={isSubmitting}
+      >
+        {isSubmitting ? "Entrando..." : "Entrar"}
       </Button>
+
+      {message && (
+        <p className="auth-form-message">
+          {message}
+        </p>
+      )}
     </form>
   );
 }
